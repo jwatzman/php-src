@@ -201,6 +201,7 @@ static YYSIZE_T zend_yytnamerr(char*, const char*);
 %token T_EXTENDS    "extends (T_EXTENDS)"
 %token T_IMPLEMENTS "implements (T_IMPLEMENTS)"
 %token T_OBJECT_OPERATOR "-> (T_OBJECT_OPERATOR)"
+%token T_NULLSAFE_OBJECT_OPERATOR "?-> (T_NULLSAFE_OBJECT_OPERATOR)"
 %token T_DOUBLE_ARROW    "=> (T_DOUBLE_ARROW)"
 %token T_LIST            "list (T_LIST)"
 %token T_ARRAY           "array (T_ARRAY)"
@@ -1011,6 +1012,8 @@ callable_variable:
 			{ $$ = zend_ast_create(ZEND_AST_DIM, $1, $3); }
 	|	dereferencable T_OBJECT_OPERATOR member_name argument_list
 			{ $$ = zend_ast_create(ZEND_AST_METHOD_CALL, $1, $3, $4); }
+	|	dereferencable T_NULLSAFE_OBJECT_OPERATOR member_name argument_list
+			{ $$ = zend_ast_create(ZEND_AST_NULLSAFE_METHOD_CALL, $1, $3, $4); }
 	|	function_call { $$ = $1; }
 ;
 
@@ -1021,6 +1024,9 @@ variable:
 			{ $$ = $1; }
 	|	dereferencable T_OBJECT_OPERATOR member_name
 			{ $$ = zend_ast_create(ZEND_AST_PROP, $1, $3); }
+	|   dereferencable T_NULLSAFE_OBJECT_OPERATOR member_name
+			{ $$ = NULL; zend_error_noreturn(E_COMPILE_ERROR,
+					"?-> is not supported for property access"); }
 ;
 
 simple_variable:

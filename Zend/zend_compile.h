@@ -764,6 +764,10 @@ END_EXTERN_C()
 /* The default value for CG(compiler_options) during eval() */
 #define ZEND_COMPILE_DEFAULT_FOR_EVAL			0
 
+/* ZEND_INIT_MEHTOD_CALL uses extended_value for arg count; we set this high bit
+ * as an extra flag, that it should be treated with "nullsafe" semantics. */
+#define ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG     (1<<31)
+
 #endif /* ZEND_COMPILE_H */
 
 /*

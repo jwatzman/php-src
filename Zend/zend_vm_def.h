@@ -2137,9 +2137,12 @@ ZEND_VM_HANDLER(112, ZEND_INIT_METHOD_CALL, TMP|VAR|UNUSED|CV, CONST|TMP|VAR|CV)
 	zend_function *fbc;
 	zend_class_entry *called_scope;
 	zend_object *obj;
+	uint8_t nullsafe;
+	uint32_t arg_count;
 
 	SAVE_OPLINE();
 
+	nullsafe = !!(opline->extended_value & ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG);
 	function_name = GET_OP2_ZVAL_PTR(BP_VAR_R);
 
 	if (OP2_TYPE != IS_CONST &&
@@ -2152,7 +2155,9 @@ ZEND_VM_HANDLER(112, ZEND_INIT_METHOD_CALL, TMP|VAR|UNUSED|CV, CONST|TMP|VAR|CV)
 
 	object = GET_OP1_OBJ_ZVAL_PTR_DEREF(BP_VAR_R);
 
-	if (OP1_TYPE != IS_UNUSED && UNEXPECTED(Z_TYPE_P(object) != IS_OBJECT)) {
+	if (UNEXPECTED(nullsafe && Z_TYPE_P(object) == IS_NULL)) {
+		object_and_properties_init(object, zend_nullclass_def, NULL);
+	} else if (OP1_TYPE != IS_UNUSED && UNEXPECTED(Z_TYPE_P(object) != IS_OBJECT)) {
 		uint32_t nesting = 1;
 
 		if (UNEXPECTED(EG(exception) != NULL)) {
@@ -2227,8 +2232,9 @@ ZEND_VM_HANDLER(112, ZEND_INIT_METHOD_CALL, TMP|VAR|UNUSED|CV, CONST|TMP|VAR|CV)
 		GC_REFCOUNT(obj)++; /* For $this pointer */
 	}
 
+	arg_count = opline->extended_value & ~ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG;
 	EX(call) = zend_vm_stack_push_call_frame(ZEND_CALL_NESTED_FUNCTION,
-		fbc, opline->extended_value, called_scope, obj, EX(call) TSRMLS_CC);
+		fbc, arg_count, called_scope, obj, EX(call) TSRMLS_CC);
 
 	FREE_OP2();
 	FREE_OP1_IF_VAR();

@@ -1846,6 +1846,7 @@ static inline zend_bool zend_is_variable(zend_ast *ast) /* {{{ */
 	return ast->kind == ZEND_AST_VAR || ast->kind == ZEND_AST_DIM
 		|| ast->kind == ZEND_AST_PROP || ast->kind == ZEND_AST_STATIC_PROP
 		|| ast->kind == ZEND_AST_CALL || ast->kind == ZEND_AST_METHOD_CALL
+		|| ast->kind == ZEND_AST_NULLSAFE_METHOD_CALL
 		|| ast->kind == ZEND_AST_STATIC_CALL;
 }
 /* }}} */
@@ -1854,6 +1855,7 @@ static inline zend_bool zend_is_call(zend_ast *ast) /* {{{ */
 {
 	return ast->kind == ZEND_AST_CALL
 		|| ast->kind == ZEND_AST_METHOD_CALL
+		|| ast->kind == ZEND_AST_NULLSAFE_METHOD_CALL
 		|| ast->kind == ZEND_AST_STATIC_CALL;
 }
 /* }}} */
@@ -2212,7 +2214,8 @@ void zend_ensure_writable_variable(const zend_ast *ast) /* {{{ */
 	if (ast->kind == ZEND_AST_CALL) {
 		zend_error_noreturn(E_COMPILE_ERROR, "Can't use function return value in write context");
 	}
-	if (ast->kind == ZEND_AST_METHOD_CALL || ast->kind == ZEND_AST_STATIC_CALL) {
+	if (ast->kind == ZEND_AST_METHOD_CALL || ast->kind == ZEND_AST_NULLSAFE_METHOD_CALL
+		|| ast->kind == ZEND_AST_STATIC_CALL) {
 		zend_error_noreturn(E_COMPILE_ERROR, "Can't use method return value in write context");
 	}
 }
@@ -2422,6 +2425,11 @@ uint32_t zend_compile_args(zend_ast *ast, zend_function *fbc TSRMLS_DC) /* {{{ *
 		}
 
 		arg_count++;
+		if (arg_count & ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG) {
+			zend_error_noreturn(E_COMPILE_ERROR,
+				"Too many arguments to function");
+		}
+
 		if (zend_is_variable(arg)) {
 			if (zend_is_call(arg)) {
 				zend_compile_var(&arg_node, arg, BP_VAR_R TSRMLS_CC);
@@ -2842,7 +2850,7 @@ void zend_compile_call(znode *result, zend_ast *ast, uint32_t type TSRMLS_DC) /*
 }
 /* }}} */
 
-void zend_compile_method_call(znode *result, zend_ast *ast, uint32_t type TSRMLS_DC) /* {{{ */
+void zend_compile_method_call(znode *result, zend_ast *ast, uint8_t nullsafe, uint32_t type TSRMLS_DC) /* {{{ */
 {
 	zend_ast *obj_ast = ast->child[0];
 	zend_ast *method_ast = ast->child[1];
@@ -2859,7 +2867,7 @@ void zend_compile_method_call(znode *result, zend_ast *ast, uint32_t type TSRMLS
 
 	zend_compile_expr(&method_node, method_ast TSRMLS_CC);
 	opline = zend_emit_op(NULL, ZEND_INIT_METHOD_CALL, &obj_node, NULL TSRMLS_CC);
-	
+
 	if (method_node.op_type == IS_CONST) {
 		if (Z_TYPE(method_node.u.constant) != IS_STRING) {
 			zend_error_noreturn(E_COMPILE_ERROR, "Method name must be a string");
@@ -2874,6 +2882,12 @@ void zend_compile_method_call(znode *result, zend_ast *ast, uint32_t type TSRMLS
 	}
 
 	zend_compile_call_common(result, args_ast, NULL TSRMLS_CC);
+
+	/* zend_compile_call_common actually modifies this opline (ugh), so wait
+	 * until it's done to set the nullsafe flag if needed. */
+	if (nullsafe) {
+		opline->extended_value |= ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG;
+	}
 }
 /* }}} */
 
@@ -6173,6 +6187,7 @@ void zend_compile_expr(znode *result, zend_ast *ast TSRMLS_DC) /* {{{ */
 		case ZEND_AST_STATIC_PROP:
 		case ZEND_AST_CALL:
 		case ZEND_AST_METHOD_CALL:
+		case ZEND_AST_NULLSAFE_METHOD_CALL:
 		case ZEND_AST_STATIC_CALL:
 			zend_compile_var(result, ast, BP_VAR_R TSRMLS_CC);
 			return;
@@ -6297,7 +6312,9 @@ void zend_compile_var(znode *result, zend_ast *ast, uint32_t type TSRMLS_DC) /* 
 			zend_compile_call(result, ast, type TSRMLS_CC);
 			return;
 		case ZEND_AST_METHOD_CALL:
-			zend_compile_method_call(result, ast, type TSRMLS_CC);
+		case ZEND_AST_NULLSAFE_METHOD_CALL:
+			zend_compile_method_call(result, ast,
+					ast->kind == ZEND_AST_NULLSAFE_METHOD_CALL, type TSRMLS_CC);
 			return;
 		case ZEND_AST_STATIC_CALL:
 			zend_compile_static_call(result, ast, type TSRMLS_CC);
