@@ -1832,6 +1832,7 @@ static inline zend_bool zend_is_variable(zend_ast *ast) /* {{{ */
 	return ast->kind == ZEND_AST_VAR || ast->kind == ZEND_AST_DIM
 		|| ast->kind == ZEND_AST_PROP || ast->kind == ZEND_AST_STATIC_PROP
 		|| ast->kind == ZEND_AST_CALL || ast->kind == ZEND_AST_METHOD_CALL
+		|| ast->kind == ZEND_AST_NULLSAFE_METHOD_CALL
 		|| ast->kind == ZEND_AST_STATIC_CALL;
 }
 /* }}} */
@@ -1840,6 +1841,7 @@ static inline zend_bool zend_is_call(zend_ast *ast) /* {{{ */
 {
 	return ast->kind == ZEND_AST_CALL
 		|| ast->kind == ZEND_AST_METHOD_CALL
+		|| ast->kind == ZEND_AST_NULLSAFE_METHOD_CALL
 		|| ast->kind == ZEND_AST_STATIC_CALL;
 }
 /* }}} */
@@ -2215,7 +2217,8 @@ void zend_ensure_writable_variable(const zend_ast *ast) /* {{{ */
 	if (ast->kind == ZEND_AST_CALL) {
 		zend_error_noreturn(E_COMPILE_ERROR, "Can't use function return value in write context");
 	}
-	if (ast->kind == ZEND_AST_METHOD_CALL || ast->kind == ZEND_AST_STATIC_CALL) {
+	if (ast->kind == ZEND_AST_METHOD_CALL || ast->kind == ZEND_AST_NULLSAFE_METHOD_CALL
+		|| ast->kind == ZEND_AST_STATIC_CALL) {
 		zend_error_noreturn(E_COMPILE_ERROR, "Can't use method return value in write context");
 	}
 }
@@ -6108,6 +6111,7 @@ void zend_compile_expr(znode *result, zend_ast *ast TSRMLS_DC) /* {{{ */
 		case ZEND_AST_STATIC_PROP:
 		case ZEND_AST_CALL:
 		case ZEND_AST_METHOD_CALL:
+		case ZEND_AST_NULLSAFE_METHOD_CALL:
 		case ZEND_AST_STATIC_CALL:
 			zend_compile_var(result, ast, BP_VAR_R TSRMLS_CC);
 			return;
@@ -6229,6 +6233,7 @@ void zend_compile_var(znode *result, zend_ast *ast, uint32_t type TSRMLS_DC) /* 
 			zend_compile_call(result, ast, type TSRMLS_CC);
 			return;
 		case ZEND_AST_METHOD_CALL:
+		case ZEND_AST_NULLSAFE_METHOD_CALL:
 			zend_compile_method_call(result, ast, type TSRMLS_CC);
 			return;
 		case ZEND_AST_STATIC_CALL:

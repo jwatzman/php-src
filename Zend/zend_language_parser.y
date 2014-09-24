@@ -1004,7 +1004,7 @@ callable_variable:
 	|	dereferencable T_OBJECT_OPERATOR member_name argument_list
 			{ $$ = zend_ast_create(ZEND_AST_METHOD_CALL, $1, $3, $4); }
 	|	dereferencable T_NULLSAFE_OBJECT_OPERATOR member_name argument_list
-			{ $$ = zend_ast_create(ZEND_AST_METHOD_CALL, $1, $3, $4); }
+			{ $$ = zend_ast_create(ZEND_AST_NULLSAFE_METHOD_CALL, $1, $3, $4); }
 	|	function_call { $$ = $1; }
 ;
 
