@@ -10806,8 +10806,13 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_TMP_CONST_HANDLER(ZEND_OPCO
 	zend_function *fbc;
 	zend_class_entry *called_scope;
 	zend_object *obj;
+	uint8_t nullsafe;
+	uint32_t arg_count;
 
 	SAVE_OPLINE();
+
+	nullsafe = !!(opline->extended_value & ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG);
+	printf("reading nullsafe: %d\n", nullsafe);
 
 	function_name = opline->op2.zv;
 
@@ -10859,8 +10864,9 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_TMP_CONST_HANDLER(ZEND_OPCO
 		GC_REFCOUNT(obj)++; /* For $this pointer */
 	}
 
+	arg_count = opline->extended_value & ~ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG;
 	EX(call) = zend_vm_stack_push_call_frame(
-		fbc, opline->extended_value, 0, called_scope, obj, EX(call) TSRMLS_CC);
+		fbc, arg_count, 0, called_scope, obj, EX(call) TSRMLS_CC);
 
 
 	CHECK_EXCEPTION();
@@ -11940,8 +11946,13 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_TMP_TMP_HANDLER(ZEND_OPCODE
 	zend_function *fbc;
 	zend_class_entry *called_scope;
 	zend_object *obj;
+	uint8_t nullsafe;
+	uint32_t arg_count;
 
 	SAVE_OPLINE();
+
+	nullsafe = !!(opline->extended_value & ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG);
+	printf("reading nullsafe: %d\n", nullsafe);
 
 	function_name = _get_zval_ptr_tmp(opline->op2.var, execute_data, &free_op2 TSRMLS_CC);
 
@@ -11993,8 +12004,9 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_TMP_TMP_HANDLER(ZEND_OPCODE
 		GC_REFCOUNT(obj)++; /* For $this pointer */
 	}
 
+	arg_count = opline->extended_value & ~ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG;
 	EX(call) = zend_vm_stack_push_call_frame(
-		fbc, opline->extended_value, 0, called_scope, obj, EX(call) TSRMLS_CC);
+		fbc, arg_count, 0, called_scope, obj, EX(call) TSRMLS_CC);
 
 	zval_ptr_dtor_nogc(free_op2.var);
 
@@ -13073,8 +13085,13 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_TMP_VAR_HANDLER(ZEND_OPCODE
 	zend_function *fbc;
 	zend_class_entry *called_scope;
 	zend_object *obj;
+	uint8_t nullsafe;
+	uint32_t arg_count;
 
 	SAVE_OPLINE();
+
+	nullsafe = !!(opline->extended_value & ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG);
+	printf("reading nullsafe: %d\n", nullsafe);
 
 	function_name = _get_zval_ptr_var(opline->op2.var, execute_data, &free_op2 TSRMLS_CC);
 
@@ -13126,8 +13143,9 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_TMP_VAR_HANDLER(ZEND_OPCODE
 		GC_REFCOUNT(obj)++; /* For $this pointer */
 	}
 
+	arg_count = opline->extended_value & ~ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG;
 	EX(call) = zend_vm_stack_push_call_frame(
-		fbc, opline->extended_value, 0, called_scope, obj, EX(call) TSRMLS_CC);
+		fbc, arg_count, 0, called_scope, obj, EX(call) TSRMLS_CC);
 
 	zval_ptr_dtor_nogc(free_op2.var);
 
@@ -14799,8 +14817,13 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_TMP_CV_HANDLER(ZEND_OPCODE_
 	zend_function *fbc;
 	zend_class_entry *called_scope;
 	zend_object *obj;
+	uint8_t nullsafe;
+	uint32_t arg_count;
 
 	SAVE_OPLINE();
+
+	nullsafe = !!(opline->extended_value & ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG);
+	printf("reading nullsafe: %d\n", nullsafe);
 
 	function_name = _get_zval_ptr_cv_BP_VAR_R(execute_data, opline->op2.var TSRMLS_CC);
 
@@ -14852,8 +14875,9 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_TMP_CV_HANDLER(ZEND_OPCODE_
 		GC_REFCOUNT(obj)++; /* For $this pointer */
 	}
 
+	arg_count = opline->extended_value & ~ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG;
 	EX(call) = zend_vm_stack_push_call_frame(
-		fbc, opline->extended_value, 0, called_scope, obj, EX(call) TSRMLS_CC);
+		fbc, arg_count, 0, called_scope, obj, EX(call) TSRMLS_CC);
 
 
 	CHECK_EXCEPTION();
@@ -18311,8 +18335,13 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_VAR_CONST_HANDLER(ZEND_OPCO
 	zend_function *fbc;
 	zend_class_entry *called_scope;
 	zend_object *obj;
+	uint8_t nullsafe;
+	uint32_t arg_count;
 
 	SAVE_OPLINE();
+
+	nullsafe = !!(opline->extended_value & ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG);
+	printf("reading nullsafe: %d\n", nullsafe);
 
 	function_name = opline->op2.zv;
 
@@ -18364,8 +18393,9 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_VAR_CONST_HANDLER(ZEND_OPCO
 		GC_REFCOUNT(obj)++; /* For $this pointer */
 	}
 
+	arg_count = opline->extended_value & ~ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG;
 	EX(call) = zend_vm_stack_push_call_frame(
-		fbc, opline->extended_value, 0, called_scope, obj, EX(call) TSRMLS_CC);
+		fbc, arg_count, 0, called_scope, obj, EX(call) TSRMLS_CC);
 
 	zval_ptr_dtor_nogc(free_op1.var);
 
@@ -20526,8 +20556,13 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_VAR_TMP_HANDLER(ZEND_OPCODE
 	zend_function *fbc;
 	zend_class_entry *called_scope;
 	zend_object *obj;
+	uint8_t nullsafe;
+	uint32_t arg_count;
 
 	SAVE_OPLINE();
+
+	nullsafe = !!(opline->extended_value & ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG);
+	printf("reading nullsafe: %d\n", nullsafe);
 
 	function_name = _get_zval_ptr_tmp(opline->op2.var, execute_data, &free_op2 TSRMLS_CC);
 
@@ -20579,8 +20614,9 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_VAR_TMP_HANDLER(ZEND_OPCODE
 		GC_REFCOUNT(obj)++; /* For $this pointer */
 	}
 
+	arg_count = opline->extended_value & ~ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG;
 	EX(call) = zend_vm_stack_push_call_frame(
-		fbc, opline->extended_value, 0, called_scope, obj, EX(call) TSRMLS_CC);
+		fbc, arg_count, 0, called_scope, obj, EX(call) TSRMLS_CC);
 
 	zval_ptr_dtor_nogc(free_op2.var);
 	zval_ptr_dtor_nogc(free_op1.var);
@@ -22708,8 +22744,13 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_VAR_VAR_HANDLER(ZEND_OPCODE
 	zend_function *fbc;
 	zend_class_entry *called_scope;
 	zend_object *obj;
+	uint8_t nullsafe;
+	uint32_t arg_count;
 
 	SAVE_OPLINE();
+
+	nullsafe = !!(opline->extended_value & ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG);
+	printf("reading nullsafe: %d\n", nullsafe);
 
 	function_name = _get_zval_ptr_var(opline->op2.var, execute_data, &free_op2 TSRMLS_CC);
 
@@ -22761,8 +22802,9 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_VAR_VAR_HANDLER(ZEND_OPCODE
 		GC_REFCOUNT(obj)++; /* For $this pointer */
 	}
 
+	arg_count = opline->extended_value & ~ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG;
 	EX(call) = zend_vm_stack_push_call_frame(
-		fbc, opline->extended_value, 0, called_scope, obj, EX(call) TSRMLS_CC);
+		fbc, arg_count, 0, called_scope, obj, EX(call) TSRMLS_CC);
 
 	zval_ptr_dtor_nogc(free_op2.var);
 	zval_ptr_dtor_nogc(free_op1.var);
@@ -26077,8 +26119,13 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_VAR_CV_HANDLER(ZEND_OPCODE_
 	zend_function *fbc;
 	zend_class_entry *called_scope;
 	zend_object *obj;
+	uint8_t nullsafe;
+	uint32_t arg_count;
 
 	SAVE_OPLINE();
+
+	nullsafe = !!(opline->extended_value & ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG);
+	printf("reading nullsafe: %d\n", nullsafe);
 
 	function_name = _get_zval_ptr_cv_BP_VAR_R(execute_data, opline->op2.var TSRMLS_CC);
 
@@ -26130,8 +26177,9 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_VAR_CV_HANDLER(ZEND_OPCODE_
 		GC_REFCOUNT(obj)++; /* For $this pointer */
 	}
 
+	arg_count = opline->extended_value & ~ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG;
 	EX(call) = zend_vm_stack_push_call_frame(
-		fbc, opline->extended_value, 0, called_scope, obj, EX(call) TSRMLS_CC);
+		fbc, arg_count, 0, called_scope, obj, EX(call) TSRMLS_CC);
 
 	zval_ptr_dtor_nogc(free_op1.var);
 
@@ -27649,8 +27697,13 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_UNUSED_CONST_HANDLER(ZEND_O
 	zend_function *fbc;
 	zend_class_entry *called_scope;
 	zend_object *obj;
+	uint8_t nullsafe;
+	uint32_t arg_count;
 
 	SAVE_OPLINE();
+
+	nullsafe = !!(opline->extended_value & ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG);
+	printf("reading nullsafe: %d\n", nullsafe);
 
 	function_name = opline->op2.zv;
 
@@ -27702,8 +27755,9 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_UNUSED_CONST_HANDLER(ZEND_O
 		GC_REFCOUNT(obj)++; /* For $this pointer */
 	}
 
+	arg_count = opline->extended_value & ~ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG;
 	EX(call) = zend_vm_stack_push_call_frame(
-		fbc, opline->extended_value, 0, called_scope, obj, EX(call) TSRMLS_CC);
+		fbc, arg_count, 0, called_scope, obj, EX(call) TSRMLS_CC);
 
 
 	CHECK_EXCEPTION();
@@ -29012,8 +29066,13 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_UNUSED_TMP_HANDLER(ZEND_OPC
 	zend_function *fbc;
 	zend_class_entry *called_scope;
 	zend_object *obj;
+	uint8_t nullsafe;
+	uint32_t arg_count;
 
 	SAVE_OPLINE();
+
+	nullsafe = !!(opline->extended_value & ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG);
+	printf("reading nullsafe: %d\n", nullsafe);
 
 	function_name = _get_zval_ptr_tmp(opline->op2.var, execute_data, &free_op2 TSRMLS_CC);
 
@@ -29065,8 +29124,9 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_UNUSED_TMP_HANDLER(ZEND_OPC
 		GC_REFCOUNT(obj)++; /* For $this pointer */
 	}
 
+	arg_count = opline->extended_value & ~ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG;
 	EX(call) = zend_vm_stack_push_call_frame(
-		fbc, opline->extended_value, 0, called_scope, obj, EX(call) TSRMLS_CC);
+		fbc, arg_count, 0, called_scope, obj, EX(call) TSRMLS_CC);
 
 	zval_ptr_dtor_nogc(free_op2.var);
 
@@ -30282,8 +30342,13 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_UNUSED_VAR_HANDLER(ZEND_OPC
 	zend_function *fbc;
 	zend_class_entry *called_scope;
 	zend_object *obj;
+	uint8_t nullsafe;
+	uint32_t arg_count;
 
 	SAVE_OPLINE();
+
+	nullsafe = !!(opline->extended_value & ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG);
+	printf("reading nullsafe: %d\n", nullsafe);
 
 	function_name = _get_zval_ptr_var(opline->op2.var, execute_data, &free_op2 TSRMLS_CC);
 
@@ -30335,8 +30400,9 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_UNUSED_VAR_HANDLER(ZEND_OPC
 		GC_REFCOUNT(obj)++; /* For $this pointer */
 	}
 
+	arg_count = opline->extended_value & ~ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG;
 	EX(call) = zend_vm_stack_push_call_frame(
-		fbc, opline->extended_value, 0, called_scope, obj, EX(call) TSRMLS_CC);
+		fbc, arg_count, 0, called_scope, obj, EX(call) TSRMLS_CC);
 
 	zval_ptr_dtor_nogc(free_op2.var);
 
@@ -32062,8 +32128,13 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_UNUSED_CV_HANDLER(ZEND_OPCO
 	zend_function *fbc;
 	zend_class_entry *called_scope;
 	zend_object *obj;
+	uint8_t nullsafe;
+	uint32_t arg_count;
 
 	SAVE_OPLINE();
+
+	nullsafe = !!(opline->extended_value & ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG);
+	printf("reading nullsafe: %d\n", nullsafe);
 
 	function_name = _get_zval_ptr_cv_BP_VAR_R(execute_data, opline->op2.var TSRMLS_CC);
 
@@ -32115,8 +32186,9 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_UNUSED_CV_HANDLER(ZEND_OPCO
 		GC_REFCOUNT(obj)++; /* For $this pointer */
 	}
 
+	arg_count = opline->extended_value & ~ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG;
 	EX(call) = zend_vm_stack_push_call_frame(
-		fbc, opline->extended_value, 0, called_scope, obj, EX(call) TSRMLS_CC);
+		fbc, arg_count, 0, called_scope, obj, EX(call) TSRMLS_CC);
 
 
 	CHECK_EXCEPTION();
@@ -35313,8 +35385,13 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_CV_CONST_HANDLER(ZEND_OPCOD
 	zend_function *fbc;
 	zend_class_entry *called_scope;
 	zend_object *obj;
+	uint8_t nullsafe;
+	uint32_t arg_count;
 
 	SAVE_OPLINE();
+
+	nullsafe = !!(opline->extended_value & ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG);
+	printf("reading nullsafe: %d\n", nullsafe);
 
 	function_name = opline->op2.zv;
 
@@ -35366,8 +35443,9 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_CV_CONST_HANDLER(ZEND_OPCOD
 		GC_REFCOUNT(obj)++; /* For $this pointer */
 	}
 
+	arg_count = opline->extended_value & ~ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG;
 	EX(call) = zend_vm_stack_push_call_frame(
-		fbc, opline->extended_value, 0, called_scope, obj, EX(call) TSRMLS_CC);
+		fbc, arg_count, 0, called_scope, obj, EX(call) TSRMLS_CC);
 
 
 	CHECK_EXCEPTION();
@@ -37370,8 +37448,13 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_CV_TMP_HANDLER(ZEND_OPCODE_
 	zend_function *fbc;
 	zend_class_entry *called_scope;
 	zend_object *obj;
+	uint8_t nullsafe;
+	uint32_t arg_count;
 
 	SAVE_OPLINE();
+
+	nullsafe = !!(opline->extended_value & ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG);
+	printf("reading nullsafe: %d\n", nullsafe);
 
 	function_name = _get_zval_ptr_tmp(opline->op2.var, execute_data, &free_op2 TSRMLS_CC);
 
@@ -37423,8 +37506,9 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_CV_TMP_HANDLER(ZEND_OPCODE_
 		GC_REFCOUNT(obj)++; /* For $this pointer */
 	}
 
+	arg_count = opline->extended_value & ~ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG;
 	EX(call) = zend_vm_stack_push_call_frame(
-		fbc, opline->extended_value, 0, called_scope, obj, EX(call) TSRMLS_CC);
+		fbc, arg_count, 0, called_scope, obj, EX(call) TSRMLS_CC);
 
 	zval_ptr_dtor_nogc(free_op2.var);
 
@@ -39432,8 +39516,13 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_CV_VAR_HANDLER(ZEND_OPCODE_
 	zend_function *fbc;
 	zend_class_entry *called_scope;
 	zend_object *obj;
+	uint8_t nullsafe;
+	uint32_t arg_count;
 
 	SAVE_OPLINE();
+
+	nullsafe = !!(opline->extended_value & ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG);
+	printf("reading nullsafe: %d\n", nullsafe);
 
 	function_name = _get_zval_ptr_var(opline->op2.var, execute_data, &free_op2 TSRMLS_CC);
 
@@ -39485,8 +39574,9 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_CV_VAR_HANDLER(ZEND_OPCODE_
 		GC_REFCOUNT(obj)++; /* For $this pointer */
 	}
 
+	arg_count = opline->extended_value & ~ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG;
 	EX(call) = zend_vm_stack_push_call_frame(
-		fbc, opline->extended_value, 0, called_scope, obj, EX(call) TSRMLS_CC);
+		fbc, arg_count, 0, called_scope, obj, EX(call) TSRMLS_CC);
 
 	zval_ptr_dtor_nogc(free_op2.var);
 
@@ -42545,8 +42635,13 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_CV_CV_HANDLER(ZEND_OPCODE_H
 	zend_function *fbc;
 	zend_class_entry *called_scope;
 	zend_object *obj;
+	uint8_t nullsafe;
+	uint32_t arg_count;
 
 	SAVE_OPLINE();
+
+	nullsafe = !!(opline->extended_value & ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG);
+	printf("reading nullsafe: %d\n", nullsafe);
 
 	function_name = _get_zval_ptr_cv_BP_VAR_R(execute_data, opline->op2.var TSRMLS_CC);
 
@@ -42598,8 +42693,9 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_CV_CV_HANDLER(ZEND_OPCODE_H
 		GC_REFCOUNT(obj)++; /* For $this pointer */
 	}
 
+	arg_count = opline->extended_value & ~ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG;
 	EX(call) = zend_vm_stack_push_call_frame(
-		fbc, opline->extended_value, 0, called_scope, obj, EX(call) TSRMLS_CC);
+		fbc, arg_count, 0, called_scope, obj, EX(call) TSRMLS_CC);
 
 
 	CHECK_EXCEPTION();

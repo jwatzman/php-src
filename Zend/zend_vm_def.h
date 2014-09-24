@@ -2127,8 +2127,13 @@ ZEND_VM_HANDLER(112, ZEND_INIT_METHOD_CALL, TMP|VAR|UNUSED|CV, CONST|TMP|VAR|CV)
 	zend_function *fbc;
 	zend_class_entry *called_scope;
 	zend_object *obj;
+	uint8_t nullsafe;
+	uint32_t arg_count;
 
 	SAVE_OPLINE();
+
+	nullsafe = !!(opline->extended_value & ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG);
+	printf("reading nullsafe: %d\n", nullsafe);
 
 	function_name = GET_OP2_ZVAL_PTR(BP_VAR_R);
 
@@ -2180,8 +2185,9 @@ ZEND_VM_HANDLER(112, ZEND_INIT_METHOD_CALL, TMP|VAR|UNUSED|CV, CONST|TMP|VAR|CV)
 		GC_REFCOUNT(obj)++; /* For $this pointer */
 	}
 
+	arg_count = opline->extended_value & ~ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG;
 	EX(call) = zend_vm_stack_push_call_frame(
-		fbc, opline->extended_value, 0, called_scope, obj, EX(call) TSRMLS_CC);
+		fbc, arg_count, 0, called_scope, obj, EX(call) TSRMLS_CC);
 
 	FREE_OP2();
 	FREE_OP1_IF_VAR();
