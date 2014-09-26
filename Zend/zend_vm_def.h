@@ -2146,7 +2146,6 @@ ZEND_VM_HANDLER(112, ZEND_INIT_METHOD_CALL, TMP|VAR|UNUSED|CV, CONST|TMP|VAR|CV)
 	object = GET_OP1_OBJ_ZVAL_PTR_DEREF(BP_VAR_R);
 
 	if (UNEXPECTED(nullsafe && Z_TYPE_P(object) == IS_NULL)) {
-		// XXX need to release "object"?
 		object_and_properties_init(object, zend_nullclass_def, NULL);
 	} else if (UNEXPECTED(Z_TYPE_P(object) != IS_OBJECT)) {
 		if (UNEXPECTED(EG(exception) != NULL)) {

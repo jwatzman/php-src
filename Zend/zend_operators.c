@@ -668,7 +668,6 @@ ZEND_API void convert_to_object(zval *op) /* {{{ */
 				HashTable *properties = emalloc(sizeof(HashTable));
 				zend_array *arr = Z_ARR_P(op);
 
-				// XXX making an stdclass
 				memcpy(properties, Z_ARRVAL_P(op), sizeof(HashTable));
 				object_and_properties_init(op, zend_standard_class_def, properties);
 				if (--GC_REFCOUNT(arr) == 0) {
