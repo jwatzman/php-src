@@ -10828,7 +10828,8 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_TMP_CONST_HANDLER(ZEND_OPCO
 
 	if (UNEXPECTED(nullsafe && Z_TYPE_P(object) == IS_NULL)) {
 		printf("got a null in nullsafe\n");
-		exit(0);
+		//object = zend_get_nullclass();
+		zend_get_nullclass(object);
 	} else if (UNEXPECTED(Z_TYPE_P(object) != IS_OBJECT)) {
 		if (UNEXPECTED(EG(exception) != NULL)) {
 
@@ -11971,7 +11972,8 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_TMP_TMP_HANDLER(ZEND_OPCODE
 
 	if (UNEXPECTED(nullsafe && Z_TYPE_P(object) == IS_NULL)) {
 		printf("got a null in nullsafe\n");
-		exit(0);
+		//object = zend_get_nullclass();
+		zend_get_nullclass(object);
 	} else if (UNEXPECTED(Z_TYPE_P(object) != IS_OBJECT)) {
 		if (UNEXPECTED(EG(exception) != NULL)) {
 			zval_ptr_dtor_nogc(free_op2.var);
@@ -13113,7 +13115,8 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_TMP_VAR_HANDLER(ZEND_OPCODE
 
 	if (UNEXPECTED(nullsafe && Z_TYPE_P(object) == IS_NULL)) {
 		printf("got a null in nullsafe\n");
-		exit(0);
+		//object = zend_get_nullclass();
+		zend_get_nullclass(object);
 	} else if (UNEXPECTED(Z_TYPE_P(object) != IS_OBJECT)) {
 		if (UNEXPECTED(EG(exception) != NULL)) {
 			zval_ptr_dtor_nogc(free_op2.var);
@@ -14848,7 +14851,8 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_TMP_CV_HANDLER(ZEND_OPCODE_
 
 	if (UNEXPECTED(nullsafe && Z_TYPE_P(object) == IS_NULL)) {
 		printf("got a null in nullsafe\n");
-		exit(0);
+		//object = zend_get_nullclass();
+		zend_get_nullclass(object);
 	} else if (UNEXPECTED(Z_TYPE_P(object) != IS_OBJECT)) {
 		if (UNEXPECTED(EG(exception) != NULL)) {
 
@@ -18369,7 +18373,8 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_VAR_CONST_HANDLER(ZEND_OPCO
 
 	if (UNEXPECTED(nullsafe && Z_TYPE_P(object) == IS_NULL)) {
 		printf("got a null in nullsafe\n");
-		exit(0);
+		//object = zend_get_nullclass();
+		zend_get_nullclass(object);
 	} else if (UNEXPECTED(Z_TYPE_P(object) != IS_OBJECT)) {
 		if (UNEXPECTED(EG(exception) != NULL)) {
 
@@ -20593,7 +20598,8 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_VAR_TMP_HANDLER(ZEND_OPCODE
 
 	if (UNEXPECTED(nullsafe && Z_TYPE_P(object) == IS_NULL)) {
 		printf("got a null in nullsafe\n");
-		exit(0);
+		//object = zend_get_nullclass();
+		zend_get_nullclass(object);
 	} else if (UNEXPECTED(Z_TYPE_P(object) != IS_OBJECT)) {
 		if (UNEXPECTED(EG(exception) != NULL)) {
 			zval_ptr_dtor_nogc(free_op2.var);
@@ -22784,7 +22790,8 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_VAR_VAR_HANDLER(ZEND_OPCODE
 
 	if (UNEXPECTED(nullsafe && Z_TYPE_P(object) == IS_NULL)) {
 		printf("got a null in nullsafe\n");
-		exit(0);
+		//object = zend_get_nullclass();
+		zend_get_nullclass(object);
 	} else if (UNEXPECTED(Z_TYPE_P(object) != IS_OBJECT)) {
 		if (UNEXPECTED(EG(exception) != NULL)) {
 			zval_ptr_dtor_nogc(free_op2.var);
@@ -26162,7 +26169,8 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_VAR_CV_HANDLER(ZEND_OPCODE_
 
 	if (UNEXPECTED(nullsafe && Z_TYPE_P(object) == IS_NULL)) {
 		printf("got a null in nullsafe\n");
-		exit(0);
+		//object = zend_get_nullclass();
+		zend_get_nullclass(object);
 	} else if (UNEXPECTED(Z_TYPE_P(object) != IS_OBJECT)) {
 		if (UNEXPECTED(EG(exception) != NULL)) {
 
@@ -27743,7 +27751,8 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_UNUSED_CONST_HANDLER(ZEND_O
 
 	if (UNEXPECTED(nullsafe && Z_TYPE_P(object) == IS_NULL)) {
 		printf("got a null in nullsafe\n");
-		exit(0);
+		//object = zend_get_nullclass();
+		zend_get_nullclass(object);
 	} else if (UNEXPECTED(Z_TYPE_P(object) != IS_OBJECT)) {
 		if (UNEXPECTED(EG(exception) != NULL)) {
 
@@ -29115,7 +29124,8 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_UNUSED_TMP_HANDLER(ZEND_OPC
 
 	if (UNEXPECTED(nullsafe && Z_TYPE_P(object) == IS_NULL)) {
 		printf("got a null in nullsafe\n");
-		exit(0);
+		//object = zend_get_nullclass();
+		zend_get_nullclass(object);
 	} else if (UNEXPECTED(Z_TYPE_P(object) != IS_OBJECT)) {
 		if (UNEXPECTED(EG(exception) != NULL)) {
 			zval_ptr_dtor_nogc(free_op2.var);
@@ -30394,7 +30404,8 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_UNUSED_VAR_HANDLER(ZEND_OPC
 
 	if (UNEXPECTED(nullsafe && Z_TYPE_P(object) == IS_NULL)) {
 		printf("got a null in nullsafe\n");
-		exit(0);
+		//object = zend_get_nullclass();
+		zend_get_nullclass(object);
 	} else if (UNEXPECTED(Z_TYPE_P(object) != IS_OBJECT)) {
 		if (UNEXPECTED(EG(exception) != NULL)) {
 			zval_ptr_dtor_nogc(free_op2.var);
@@ -32183,7 +32194,8 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_UNUSED_CV_HANDLER(ZEND_OPCO
 
 	if (UNEXPECTED(nullsafe && Z_TYPE_P(object) == IS_NULL)) {
 		printf("got a null in nullsafe\n");
-		exit(0);
+		//object = zend_get_nullclass();
+		zend_get_nullclass(object);
 	} else if (UNEXPECTED(Z_TYPE_P(object) != IS_OBJECT)) {
 		if (UNEXPECTED(EG(exception) != NULL)) {
 
@@ -35443,7 +35455,8 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_CV_CONST_HANDLER(ZEND_OPCOD
 
 	if (UNEXPECTED(nullsafe && Z_TYPE_P(object) == IS_NULL)) {
 		printf("got a null in nullsafe\n");
-		exit(0);
+		//object = zend_get_nullclass();
+		zend_get_nullclass(object);
 	} else if (UNEXPECTED(Z_TYPE_P(object) != IS_OBJECT)) {
 		if (UNEXPECTED(EG(exception) != NULL)) {
 
@@ -37509,7 +37522,8 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_CV_TMP_HANDLER(ZEND_OPCODE_
 
 	if (UNEXPECTED(nullsafe && Z_TYPE_P(object) == IS_NULL)) {
 		printf("got a null in nullsafe\n");
-		exit(0);
+		//object = zend_get_nullclass();
+		zend_get_nullclass(object);
 	} else if (UNEXPECTED(Z_TYPE_P(object) != IS_OBJECT)) {
 		if (UNEXPECTED(EG(exception) != NULL)) {
 			zval_ptr_dtor_nogc(free_op2.var);
@@ -39580,7 +39594,8 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_CV_VAR_HANDLER(ZEND_OPCODE_
 
 	if (UNEXPECTED(nullsafe && Z_TYPE_P(object) == IS_NULL)) {
 		printf("got a null in nullsafe\n");
-		exit(0);
+		//object = zend_get_nullclass();
+		zend_get_nullclass(object);
 	} else if (UNEXPECTED(Z_TYPE_P(object) != IS_OBJECT)) {
 		if (UNEXPECTED(EG(exception) != NULL)) {
 			zval_ptr_dtor_nogc(free_op2.var);
@@ -42702,7 +42717,8 @@ static int ZEND_FASTCALL  ZEND_INIT_METHOD_CALL_SPEC_CV_CV_HANDLER(ZEND_OPCODE_H
 
 	if (UNEXPECTED(nullsafe && Z_TYPE_P(object) == IS_NULL)) {
 		printf("got a null in nullsafe\n");
-		exit(0);
+		//object = zend_get_nullclass();
+		zend_get_nullclass(object);
 	} else if (UNEXPECTED(Z_TYPE_P(object) != IS_OBJECT)) {
 		if (UNEXPECTED(EG(exception) != NULL)) {
 

@@ -33,6 +33,7 @@
 #include "zend_extensions.h"
 #include "zend_ini.h"
 #include "zend_exceptions.h"
+#include "zend_nullclass.h"
 #include "zend_interfaces.h"
 #include "zend_closures.h"
 #include "zend_generators.h"

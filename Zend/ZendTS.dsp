@@ -172,6 +172,10 @@ SOURCE=.\zend_exceptions.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\zend_nullclass.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\zend_execute.c
 # ADD CPP /I "..\TSRM"
 # End Source File

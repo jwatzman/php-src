@@ -2149,7 +2149,8 @@ ZEND_VM_HANDLER(112, ZEND_INIT_METHOD_CALL, TMP|VAR|UNUSED|CV, CONST|TMP|VAR|CV)
 
 	if (UNEXPECTED(nullsafe && Z_TYPE_P(object) == IS_NULL)) {
 		printf("got a null in nullsafe\n");
-		exit(0);
+		//object = zend_get_nullclass();
+		zend_get_nullclass(object);
 	} else if (UNEXPECTED(Z_TYPE_P(object) != IS_OBJECT)) {
 		if (UNEXPECTED(EG(exception) != NULL)) {
 			FREE_OP2();
