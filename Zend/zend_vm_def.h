@@ -2133,8 +2133,6 @@ ZEND_VM_HANDLER(112, ZEND_INIT_METHOD_CALL, TMP|VAR|UNUSED|CV, CONST|TMP|VAR|CV)
 	SAVE_OPLINE();
 
 	nullsafe = !!(opline->extended_value & ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG);
-	printf("reading nullsafe: %d\n", nullsafe);
-
 	function_name = GET_OP2_ZVAL_PTR(BP_VAR_R);
 
 	if (OP2_TYPE != IS_CONST &&
@@ -2148,9 +2146,8 @@ ZEND_VM_HANDLER(112, ZEND_INIT_METHOD_CALL, TMP|VAR|UNUSED|CV, CONST|TMP|VAR|CV)
 	object = GET_OP1_OBJ_ZVAL_PTR_DEREF(BP_VAR_R);
 
 	if (UNEXPECTED(nullsafe && Z_TYPE_P(object) == IS_NULL)) {
-		printf("got a null in nullsafe\n");
-		//object = zend_get_nullclass();
-		zend_get_nullclass(object);
+		// XXX need to release "object"?
+		object_and_properties_init(object, zend_nullclass_def, NULL);
 	} else if (UNEXPECTED(Z_TYPE_P(object) != IS_OBJECT)) {
 		if (UNEXPECTED(EG(exception) != NULL)) {
 			FREE_OP2();

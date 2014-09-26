@@ -2887,7 +2887,6 @@ void zend_compile_method_call(znode *result, zend_ast *ast, uint8_t nullsafe, ui
 
 	/* zend_compile_call_common actually modifies this opline (ugh), so wait
 	 * until it's done to set the nullsafe flag if needed. */
-	printf("setting nullsafe: %d\n", nullsafe);
 	if (nullsafe) {
 		opline->extended_value |= ZEND_INIT_METHOD_CALL_NULLSAFE_FLAG;
 	}

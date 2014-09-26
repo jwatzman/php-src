@@ -23,9 +23,8 @@
 
 BEGIN_EXTERN_C()
 
+extern zend_class_entry *zend_nullclass_def;
 void zend_register_default_nullclass(TSRMLS_D);
-//zval* zend_get_nullclass();
-void zend_get_nullclass(zval *z);
 
 END_EXTERN_C()
 
