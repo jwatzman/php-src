@@ -1015,6 +1015,9 @@ variable:
 			{ $$ = $1; }
 	|	dereferencable T_OBJECT_OPERATOR member_name
 			{ $$ = zend_ast_create(ZEND_AST_PROP, $1, $3); }
+	|   dereferencable T_NULLSAFE_OBJECT_OPERATOR member_name
+			{ $$ = NULL; zend_error_noreturn(E_COMPILE_ERROR,
+					"blah blah HHVM error blah"); }
 ;
 
 simple_variable:
